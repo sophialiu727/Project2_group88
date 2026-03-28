@@ -17,6 +17,8 @@ public:
     std::string getRestaurant() const;
     std::string getFoodItem() const;
     double getCalories() const;
+
+    void printItem();
 };
 
 #endif

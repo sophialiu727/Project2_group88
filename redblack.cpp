@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 // struct rbnode {
@@ -143,12 +144,14 @@ using namespace std;
 #include "MenuItem.h"
 
 struct rbnode {
-    MenuItem data;
+    std::vector<MenuItem> dataList;
     string color;
     rbnode *left, *right, *parent;
 
     rbnode(const MenuItem& data)
-        : data(data), color("RED"), left(nullptr), right(nullptr), parent(nullptr) {}
+        : color("RED"), left(nullptr), right(nullptr), parent(nullptr) {
+            dataList.push_back(data);
+        }
 };
 
 class RedBlackTree {
@@ -237,31 +240,87 @@ private:
         root->color = "BLACK";
     }
 
+    rbnode* searchHelper(rbnode* node, std::string key){
+        if (node == nullptr)
+        return nullptr;
+
+        if (key == node->dataList[0].getRestaurant())
+            return node;
+
+        if (key < node->dataList[0].getRestaurant())
+            return searchHelper(node->left, key);
+        else
+            return searchHelper(node->right, key);
+    }
+
+    std::vector<MenuItem> searchContainsHelper(rbnode* node, std::string key){
+        if(node == nullptr){
+            return {};
+        }
+
+        std::vector<MenuItem> result;
+ 
+        for(int i = 0 ; i < node -> dataList.size() ; ++i){
+            if (node -> dataList[i].getFoodItem().find(key) != std::string::npos) {
+                result.push_back(node->dataList[i]);
+            }
+        }
+
+        auto rightList = searchContainsHelper(node -> right, key);
+        auto leftList = searchContainsHelper(node -> left, key);
+
+        for(int i = 0 ; i < rightList.size() ; ++i){
+            result.push_back(rightList[i]);
+        }
+        for(int i = 0 ; i < leftList.size() ; ++i){
+            result.push_back(leftList[i]);
+        }
+
+        return result;
+    }
+
 public:
     RedBlackTree() : root(nullptr) {}
 
     void insert(const MenuItem& item){
-        rbnode* newNode = new rbnode(item);
         rbnode* y = nullptr;
         rbnode* x = root;
 
         while (x != nullptr){
             y = x;
-            if (item.getRestaurant() < x->data.getRestaurant())
+            if(item.getRestaurant() == x -> dataList[0].getRestaurant()){
+                x->dataList.push_back(item);
+                return;
+            }
+            else if (item.getRestaurant() < x->dataList[0].getRestaurant())
                 x = x->left;
             else
                 x = x->right;
         }
 
+        rbnode* newNode = new rbnode(item);
         newNode->parent = y;
 
         if (y == nullptr)
             root = newNode;
-        else if (item.getRestaurant() < y->data.getRestaurant())
+        else if (item.getRestaurant() < y->dataList[0].getRestaurant())
             y->left = newNode;
         else
             y->right = newNode;
 
         fixInsert(newNode);
+    }
+
+    vector<MenuItem> search(const string& key) {
+        rbnode* result = searchHelper(root, key);
+
+        if (result == nullptr)
+            return {};
+
+        return result->dataList;
+    }
+
+    vector<MenuItem> searchContains(std::string key){
+        return searchContainsHelper(root, key);
     }
 };

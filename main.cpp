@@ -160,5 +160,15 @@ int main() {
         rbtree.insert(items[i]);
     }
 
+    // auto rbtree_7eleven = rbtree.search("7 Eleven");
+    // for(int i = 0 ; i < rbtree_7eleven.size() ; ++i){
+    //     rbtree_7eleven[i].printItem();
+    // }
+
+    auto rbtree_bacon = rbtree.searchContains("Bacon");
+    for(int i = 0 ; i < rbtree_bacon.size() ; ++i){
+        rbtree_bacon[i].printItem();
+    }
+
     return 0;
 }

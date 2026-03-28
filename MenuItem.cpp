@@ -1,3 +1,5 @@
+#include <string>
+#include <iostream>
 #include "MenuItem.h"
 
 MenuItem::MenuItem() : restaurant(""), foodItem(""), calories(0.0) {}
@@ -15,4 +17,9 @@ std::string MenuItem::getFoodItem() const {
 
 double MenuItem::getCalories() const {
     return calories;
+}
+void MenuItem::printItem(){
+    std::cout << restaurant << " | "
+             << foodItem << " | "
+             << calories << std::endl;
 }

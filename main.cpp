@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <cctype>
 #include "MenuItem.h"
+#include "btree.cpp"
+#include "redblack.cpp"
 
 using namespace std;
 
@@ -105,6 +107,7 @@ int main() {
     cout << endl;
 
     // Print first 10 items for testing
+    cout << "Preview of the first 10 elements" << endl;
     for (size_t i = 0; i < items.size() && i < 10; i++) {
         cout << items[i].getRestaurant() << " | "
              << items[i].getFoodItem() << " | "

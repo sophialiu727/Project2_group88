@@ -20,34 +20,34 @@ void shiftLeft(T* arr, int i, int& size){
 }
 
 template<typename T>
-class node{
+class bnode{
     public:
-    node<T>** children; //children array
+    bnode<T>** children; //children array
     T** data; //array of data
 
     int m; //tree order
     
     int min; //minimum number of keys
 
-    bool leaf; //whether node is leaf or not
+    bool leaf; //whether bnode is leaf or not
 
     int num_keys; //number of keys
 
-    node(int m, bool leaf = true)
+    bnode(int m, bool leaf = true)
         : m(m), min(ceil(m/2.0) - 1), leaf(leaf), num_keys(0){
             //allocates memory for the array
-            children = new node<T>*[m + 1]();
+            children = new bnode<T>*[m + 1]();
             data = new T*[m];
         }
 
-    node<T>* insert(T* element, T*& up){
+    bnode<T>* insert(T* element, T*& up){
         int i  = 0;
         //find position of element
         while(i < num_keys && element -> key > data[i] -> key){
             ++i;
         }
 
-        //if you are inserting into a leaf node, you shift all the data to the right and then insert the element
+        //if you are inserting into a leaf bnode, you shift all the data to the right and then insert the element
         if(leaf == true){
             shiftRight<T*>(data, i ,num_keys);
             data[i] = element;
@@ -58,14 +58,14 @@ class node{
             }
         }
         else{
-            node<T>* right = children[i] -> insert(element, up);
+            bnode<T>* right = children[i] -> insert(element, up);
 
             if(right){
                 shiftRight<T*>(data, i, num_keys);
                 data[i] = up;
 
                 int _num_keys = num_keys;
-                shiftRight<node<T>*>(children, i+1, _num_keys);
+                shiftRight<bnode<T>*>(children, i+1, _num_keys);
                 children[i + 1] = right;
 
                 if(num_keys == m){
@@ -107,8 +107,8 @@ class node{
     }
 
     private:
-    node<T>* split(T*& up){
-        node<T>* right = new node<T>(m, leaf);
+    bnode<T>* split(T*& up){
+        bnode<T>* right = new bnode<T>(m, leaf);
 
         up = data[min];
         data[min] = nullptr;
@@ -135,11 +135,11 @@ template<typename T>
 class BTree{
     public:
     int m; //degree of the tree
-    node<T>* root; //root
+    bnode<T>* root; //root
     
     BTree(int order):
         m(order){
-            root = new node<T>(m, true);
+            root = new bnode<T>(m, true);
             root -> min = 1;
         }
 
@@ -149,10 +149,10 @@ class BTree{
 
     void insert(T* element){
         T* up = nullptr;
-        node<T>* right = root -> insert(element, up);
+        bnode<T>* right = root -> insert(element, up);
 
         if(right){
-            node<T>* newRoot = new node<T>(m, false);
+            bnode<T>* newRoot = new bnode<T>(m, false);
 
             newRoot -> data[0] = up;
             newRoot -> num_keys = 1;

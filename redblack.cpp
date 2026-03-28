@@ -6,23 +6,23 @@
 #include <string>
 using namespace std;
 
-struct node {
+struct rbnode {
   int data;
   string color;
-  node *left, *right, *parent;
+  rbnode *left, *right, *parent;
 
-  node(int data) : data(data), color("RED"), left(nullptr), right(nullptr), parent(nullptr){}
+  rbnode(int data) : data(data), color("RED"), left(nullptr), right(nullptr), parent(nullptr){}
 };
 
 class RedBlackTree {
   private:
-    node* root;
-    node* NIL;
+    rbnode* root;
+    rbnode* NIL;
 
     //rotations
 
-    void leftRotate(node* x){
-      node* y = x->right;
+    void leftRotate(rbnode* x){
+      rbnode* y = x->right;
       x->right = y->left;
 
       if (y->left != NIL) {
@@ -44,8 +44,8 @@ class RedBlackTree {
       x->parent = y;
     }
 
-    void rightRotate(node* x){
-      node* y = x->left;
+    void rightRotate(rbnode* x){
+      rbnode* y = x->left;
       x->left = y->right;
 
       if (y->right != NIL) {
@@ -67,12 +67,12 @@ class RedBlackTree {
       x->parent = y;
     }
 
-    //checking for volor violation
+    //checking for color violation
 
-    void fixInsert(node* r){
-      while(r!=root&&k->parent->color=="RED"){
+    void fixInsert(rbnode* r){
+      while(r!=root&&r->parent->color=="RED"){
         if(r->parent == r->parent->parent->left){
-          node*uncle = r->parent->parent->right;
+          rbnode*uncle = r->parent->parent->right;
           if(uncle->color == "RED"){
             r->parent->color = "BLACK";
             uncle->color = "BLACK";
@@ -90,7 +90,7 @@ class RedBlackTree {
           }
         }
         else{
-          node*uncle = r->parent->parent->left;
+          rbnode*uncle = r->parent->parent->left;
           if(uncle->color == "RED"){
             r->parent->color = "BLACK";
             uncle->color = "BLACK";
@@ -114,28 +114,28 @@ class RedBlackTree {
   public:
     RedBlackTree() : root(nullptr) {}
 
-    // insert a node
+    // insert a rbnode
     void insert(int val) {
-        Node* newNode = new Node(val);
-        Node* y = nullptr;
-        Node* x = root;
+        rbnode* newrbnode = new rbnode(val);
+        rbnode* y = nullptr;
+        rbnode* x = root;
 
         while (x != nullptr) {
             y = x;
-            if (newNode->data < x->data)
+            if (newrbnode->data < x->data)
                 x = x->left;
             else
                 x = x->right;
         }
 
-        newNode->parent = y;
+        newrbnode->parent = y;
         if (y == nullptr)
-            root = newNode;
-        else if (newNode->data < y->data)
-            y->left = newNode;
+            root = newrbnode;
+        else if (newrbnode->data < y->data)
+            y->left = newrbnode;
         else
-            y->right = newNode;
+            y->right = newrbnode;
 
-        fixInsert(newNode);
+        fixInsert(newrbnode);
     }
-}
+};

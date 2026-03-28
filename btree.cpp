@@ -43,7 +43,7 @@ class bnode{
     bnode<T>* insert(T* element, T*& up){
         int i  = 0;
         //find position of element
-        while(i < num_keys && element -> key > data[i] -> key){
+        while(i < num_keys && element -> key >= data[i] -> key){
             ++i;
         }
 
@@ -78,7 +78,7 @@ class bnode{
         return nullptr;
     }
 
-    T* search(int key){
+    T* search(std::string key){
         int i = 0;
         for(; i < num_keys && key >= data[i] -> key; ++i){
             if(key == data[i] -> key){
@@ -92,6 +92,59 @@ class bnode{
         else{
             return children[i] -> search(key);
         }
+    }
+
+    std::vector<T*> searchAll(std::string key){
+        std::vector<T*> result;
+
+        int i = 0;
+        while(i < num_keys && key > data[i]->key){
+            i++;
+        }
+
+        int j = i;
+        while(j < num_keys && data[j]->key == key){
+            result.push_back(data[j]);
+            j++;
+        }
+
+        if(leaf){
+            return result;
+        }
+
+        for(int c = i; c <= j; c++){
+            if(children[c] != nullptr){
+                std::vector<T*> childResults = children[c]->searchAll(key);
+                for(int k = 0; k < childResults.size(); k++){
+                    result.push_back(childResults[k]);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    std::vector<T*> searchContains(std::string key){
+        std::vector<T*> result;
+
+        for(int i = 0; i < num_keys; i++){
+            if(data[i] != nullptr && data[i]->key.find(key) != std::string::npos){
+                result.push_back(data[i]);
+            }
+        }
+
+        if(!leaf){
+            for(int i = 0; i <= num_keys; i++){
+                if(children[i] != nullptr){
+                    std::vector<T*> childResults = children[i]->searchContains(key);
+                    for(int k = 0; k < childResults.size(); k++){
+                        result.push_back(childResults[k]);
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     void traverse(){
@@ -166,5 +219,13 @@ class BTree{
 
     T*& operator[](int key){
         return root -> search(key);
+    }
+
+    std::vector<T*> search(std::string key) {
+        return root->searchAll(key);
+    }
+
+    std::vector<T*> searchContains(std::string key) {
+        return root->searchContains(key);
     }
 };

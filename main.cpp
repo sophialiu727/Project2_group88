@@ -11,6 +11,17 @@
 
 using namespace std;
 
+struct stringdata {
+	std::string key;
+	MenuItem data;
+
+    void printItem(){
+        cout << data.getRestaurant() << " | "
+             << data.getFoodItem() << " | "
+             << data.getCalories() << endl;
+    }
+};
+
 string trim(const string& s) {
     size_t start = 0;
     while (start < s.size() && isspace(static_cast<unsigned char>(s[start]))) {
@@ -69,7 +80,8 @@ vector<MenuItem> readCSV(const string& filename) {
     // Skip header row
     getline(file, line);
 
-    while (getline(file, line)) {
+    int i = 0;
+    while (getline(file, line) && i < 100) {
         if (trim(line).empty()) {
             continue;
         }
@@ -92,6 +104,8 @@ vector<MenuItem> readCSV(const string& filename) {
         catch (const exception&) {
             cerr << "Skipping row with invalid calorie value: " << line << endl;
         }
+
+        i++;
     }
 
     file.close();
@@ -112,6 +126,38 @@ int main() {
         cout << items[i].getRestaurant() << " | "
              << items[i].getFoodItem() << " | "
              << items[i].getCalories() << endl;
+    }
+
+    //creates btree
+    BTree<stringdata> btree_restaurant(items.size());
+    for(int i = 0 ; i < items.size() ; ++i){
+        stringdata* d = new stringdata;
+        d -> key = items[i].getRestaurant();
+        d -> data = items[i];
+        btree_restaurant.insert(d);
+    }
+
+    // auto seven_eleven = btree_restaurant.search("7 Eleven");
+    // for(int i = 0 ; i < seven_eleven.size() ; ++i){
+    //     cout << seven_eleven[i] -> key << endl;
+    // }
+
+    BTree<stringdata> btree_item(items.size());
+    for(int i = 0 ; i < items.size() ; ++i){
+        stringdata* d = new stringdata;
+        d -> key = items[i].getFoodItem();
+        d -> data = items[i];
+        btree_item.insert(d);
+    }
+
+    // auto apple_pie = btree_item.searchContains("Bacon");
+    // for(int i = 0 ; i < apple_pie.size() ; ++i){
+    //     apple_pie[i] -> printItem();
+    // }
+
+    RedBlackTree rbtree;
+    for(int i = 0 ; i < items.size() ; ++i){
+        rbtree.insert(items[i]);
     }
 
     return 0;

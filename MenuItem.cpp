@@ -16,21 +16,3 @@ std::string MenuItem::getFoodItem() const {
 double MenuItem::getCalories() const {
     return calories;
 }
-/* MenuItem::MenuItem(string restaurant, string foodItem, int calories){
-  this->restaurant = restaurant;
-  this->foodItem = foodItem;
-  this->calories = calories;
-}
-
-string MenuItem::getRestaurant() const{
-  return restaurant;
-}
-
-string MenuItem::getFoodItem() const{
-  return foodItem;
-}
-
-int MenuItem::getCalories() const{
-  return calories;
-}
-*/

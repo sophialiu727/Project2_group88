@@ -5,6 +5,7 @@
 #include <string>
 #include <stdexcept>
 #include <cctype>
+#include <chrono>
 #include "MenuItem.h"
 #include "btree.cpp"
 #include "redblack.cpp"
@@ -112,13 +113,22 @@ vector<MenuItem> readCSV(const string& filename) {
     return items;
 }
 
-void interface(BTree<stringdata> btree_restaurant, BTree<stringdata> btree_item, RedBlackTree rbtree){
+void interface(BTree<stringdata>& btree_restaurant, BTree<stringdata>& btree_item, RedBlackTree& rbtree){
+    chrono::high_resolution_clock::time_point start, end;
     int choice = -1;
     int searchType = 0;
+    int runs = 100;
+
+    chrono::microseconds brduration = chrono::microseconds::zero();
+    chrono::microseconds biduration = chrono::microseconds::zero();
+    chrono::microseconds rbrduration = chrono::microseconds::zero();
+    chrono::microseconds rbiduration = chrono::microseconds::zero();
+    
     while(choice != 0){
         cout << "\n===== MENU =====\n";
         cout << "1. Search B-Tree\n";
         cout << "2. Search Red-Black Tree\n";
+        cout << "3. Show Execution Times\n";
         cout << "0. Exit\n";
         cout << "Enter choice: ";
         cin >> choice;
@@ -142,13 +152,29 @@ void interface(BTree<stringdata> btree_restaurant, BTree<stringdata> btree_item,
         
         if(choice == 1){
             if(searchType == 1){
-                auto results = btree_restaurant.search(key);
+                start = chrono::high_resolution_clock::now();
+
+                vector<stringdata*> results;
+                for (int i = 0; i < runs; i++) {
+                    results = btree_restaurant.search(key);
+                }
+
+                end = chrono::high_resolution_clock::now();
+
                 for(int i = 0 ; i < results.size() ; ++i){
                     results[i] -> printItem();
                 }
+
+                brduration = chrono::duration_cast<chrono::microseconds>(end - start);
             }
             if(searchType == 2){
-                auto results = btree_item.searchContains(key);
+                start = chrono::high_resolution_clock::now();
+                vector<stringdata*> results;
+                for (int i = 0; i < runs; i++) {
+                    results = btree_item.searchContains(key);
+                }
+                end = chrono::high_resolution_clock::now();
+                biduration = chrono::duration_cast<chrono::microseconds>(end - start);
                 for(int i = 0 ; i < results.size() ; ++i){
                     results[i] -> printItem();
                 }
@@ -156,17 +182,36 @@ void interface(BTree<stringdata> btree_restaurant, BTree<stringdata> btree_item,
         }
         if(choice == 2){
             if(searchType == 1){
-                auto results = rbtree.search(key);
+                start = chrono::high_resolution_clock::now();
+                vector<MenuItem> results;
+                for (int i = 0; i < runs; i++) {
+                    results = rbtree.search(key);
+                }
+                end = chrono::high_resolution_clock::now();
+                rbrduration = chrono::duration_cast<chrono::microseconds>(end - start);
                 for(int i = 0 ; i < results.size() ; ++i){
                     results[i].printItem();
                 }
             }
             if(searchType == 2){
-                auto results = rbtree.searchContains(key);
+                start = chrono::high_resolution_clock::now();
+                vector<MenuItem> results;
+                for (int i = 0; i < runs; i++) {
+                    results = rbtree.searchContains(key);
+                }
+                end = chrono::high_resolution_clock::now();
+                rbiduration = chrono::duration_cast<chrono::microseconds>(end - start);
                 for(int i = 0 ; i < results.size() ; ++i){
                     results[i].printItem();
                 }
             }
+        }
+        if(choice == 3){
+            cout << "\nShowing Execution Times:";
+            cout << "\nBTree Search: " << brduration.count() << " microseconds";
+            cout << "\nBTree Search (Full Traversal): " << biduration.count() << " microseconds";
+            cout << "\nRBTree Search: " << rbrduration.count() << " microseconds";
+            cout << "\nRBTree Search: (Full Traversal): " << rbiduration.count() << " microseconds" << endl;
         }
     }
 }

@@ -5,7 +5,7 @@ By Paddy Lin, Sophia Liu, and Andrew Lo
 
 After initializing the program, the following menu appears: 
 
-    ===== MENU =====
+===== MENU =====
 1. Search B-Tree
 2. Search Red-Black Tree
 3. Show Execution Times
@@ -29,5 +29,9 @@ Enter choice:
 After selection, input the desired Restaurant or Menu Item, and any corresponding Food Items will be listed in order from highest calorie count to lowest
 
 --------------------------
+
+Selecting 3 shows the time it took for both trees to execute
+
+-Must run search in order to show time, otherwise default is 0 microseconds 
 
 Enter 0 to exit program

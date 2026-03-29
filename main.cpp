@@ -82,7 +82,7 @@ vector<MenuItem> readCSV(const string& filename) {
     getline(file, line);
 
     int i = 0;
-    while (getline(file, line) && i < 100) {
+    while (getline(file, line)) {
         if (trim(line).empty()) {
             continue;
         }

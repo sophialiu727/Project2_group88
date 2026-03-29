@@ -1,7 +1,11 @@
 <H1> COP3530 - Mega Calorie Sheet </h1>
 By Paddy Lin, Sophia Liu, and Andrew Lo
 
-<h2> Directions for Usage </h2>
+
+<h2> Project Description</h2>
+ The Mega Calorie sheet is a search function that searches food items from a variety of restaurants. Search can either be conducted by restaurant name or food name, search results are ordered from highest calorie count to lowest. Search can be conducted with either Red-Black tree or B-tree, and the execution times can be compared after execution.
+
+<h3> Directions for Usage </h3>
 
 After initializing the program, the following menu appears: 
 
@@ -26,12 +30,14 @@ Enter choice:
 
 --------------------------
 
-After selection, input the desired Restaurant or Menu Item, and any corresponding Food Items will be listed in order from highest calorie count to lowest
+After selection, input the desired Restaurant or Menu Item
 
 --------------------------
 
 Selecting 3 shows the time it took for both trees to execute
 
 -Must run search in order to show time, otherwise default is 0 microseconds 
+
+--------------------------
 
 Enter 0 to exit program
